@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titanic Survival Predictor</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="card">
+
+    <img src="{{ url_for('static', filename='images/ship.jpg') }}" class="ship-img">
+
+    <h1>🚢 Titanic Survival Predictor</h1>
+
+    <form method="POST">
+
+        <div class="row">
+
+            <input type="number" name="pclass" placeholder="Passenger Class (1-3)"
+                   value="{{ form_data.pclass }}" required>
+
+            <select name="sex" required>
+                <option value="">Select Gender</option>
+                <option value="1" {% if form_data.sex == 1 %}selected{% endif %}>Male</option>
+                <option value="0" {% if form_data.sex == 0 %}selected{% endif %}>Female</option>
+            </select>
+
+        </div>
+
+        <div class="fare-box">
+            <label>💰 Fare: £<span id="fareValue">{{ form_data.fare or 50 }}</span></label>
+
+            <input type="range" name="fare" id="fare"
+                   min="0" max="600" step="1"
+                   value="{{ form_data.fare or 50 }}">
+        </div>
+
+        <div class="row">
+
+            <input type="number" name="age" placeholder="Age"
+                   value="{{ form_data.age }}" required>
+
+            <input type="number" name="sibsp" placeholder="Siblings / Spouse"
+                   value="{{ form_data.sibsp }}" required>
+
+        </div>
+
+        <div class="row">
+
+            <input type="number" name="parch" placeholder="Parents / Children"
+                   value="{{ form_data.parch }}" required>
+
+            <select name="model">
+
+                <option value="logistic"
+                    {% if form_data.model == "logistic" %}selected{% endif %}>
+                    Logistic Regression
+                </option>
+
+                <option value="rf"
+                    {% if form_data.model == "rf" %}selected{% endif %}>
+                    Random Forest
+                </option>
+
+            </select>
+
+        </div>
+
+        <button type="submit">🔍 Predict Survival</button>
+
+    </form>
+
+    {% if prediction %}
+        <div class="result">
+            {{ prediction }}
+        </div>
+    {% endif %}
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
